@@ -189,6 +189,7 @@ a.contact-button:hover{
 .zip-button{
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 400;
+    height: 100%;
     font-size: 24px;
     background: #201B71;
     color: white;
@@ -245,6 +246,18 @@ img.portrait{
     background-size: cover;
     background-repeat: none;
     background-image: url("../assets/for.svg");
+}
+
+.against-icon{
+    position: absolute;
+    top:-4px;
+    right:-4px;
+    z-index: 1;
+    width: 36px;
+    height:36px;
+    background-size: cover;
+    background-repeat: none;
+    background-image: url("../assets/against.svg");
 }
 
 .zip-input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
@@ -342,7 +355,7 @@ margin:0;
 
 #results{
     display: flex;
-    width: 100%;
+    width: 98%;
     justify-content: center;
 }
 .result-info{
@@ -351,8 +364,8 @@ margin:0;
     padding-left: 1rem;
     flex-shrink: 3;
 }
-.result{
-    /*border: 1px solid black;*/
+.result{ 
+    padding-left: 4%;
     width: 31.5%;
     display: flex;
     flex-direction: column;
