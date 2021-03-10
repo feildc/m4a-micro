@@ -8,7 +8,7 @@
   <meta name="description" content="The HTML5 Herald">
   <meta name="pinterest" content="nopin" />
   <meta content="width=device-width, initial-scale=1" name="viewport" />
-
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
@@ -29,11 +29,14 @@
           <div id="info-wrap">
             <h1>Do my senators and rep support medicare for all?</h1>
             <p>See if your Senators and Representiative has signed on to support Medicare For All legislation.See if your Senators and Representiative has signed on to support Medicare For All legislation.</p>
+            <div class="zip-bar-wrap"> 
             <div class="zip-bar">
-                <img class="zip-icon" src="assets/location.svg"></img>
-                <input class="zip-input" placeholder="Enter Zip Code" type="text" autocorrect="off" inputmode="decimal"  autocomplete="postal-code" maxlength="10"></input>
-                <a href="./results.html"><div class="zip-button">Check</div></a>  
+                  <img class="zip-icon" src="assets/location.svg"></img>
+                  <input id="zip-input" class="zip-input" placeholder="Enter Zip Code" type="text" autocorrect="off" inputmode="decimal"  autocomplete="postal-code" maxlength="5"></input> 
+                  <button id="zip-button" class="zip-button" onclick="addZipToUrl()">Check</button>
               </div> 
+              <span id="zip-alert" class="zip-alert">Please enter a valid zip code</span>
+            </div>
         </div>
           <div id="illustration-wrap">
               <img src="./assets/illustration.svg" alt="">

@@ -173,7 +173,11 @@ a.contact-button:hover{
 
 .container{
 }
-
+.zip-bar-wrap{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5rem;
+}
 .zip-bar{
     background: white;
     display: flex;
@@ -181,28 +185,32 @@ a.contact-button:hover{
     padding: 12px;
     border-radius: 100px;
     box-shadow: 0px 4px 32px rgba(0, 0, 0, 0.05);
-    margin-top: 5rem;
     height:68px;
     margin-right: 2rem;
 }
 
+
 .zip-button{
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 400;
-    height: 100%;
     font-size: 24px;
     background: #201B71;
-    color: white;
     margin-left: auto;
-    border-radius: 100px;
-    padding: 0 64px;
-    line-height: 64px;
+    color: white;
     transition: .3s;
+    border:none;
+    border-radius: 100px;
+    padding: 0 56px;
     cursor: pointer;
-  
+    outline: none;
 }
-.zip-button:hover{
+
+.zip-button:enabled:hover{
     background: #161357;
+}
+
+.zip-button:disabled{
+    color:rgba(255, 255, 255, .3);
 }
 
 .zip-input{
@@ -218,6 +226,14 @@ a.contact-button:hover{
 
 .zip-icon{
  padding:7px 8px;
+}
+
+.zip-alert{
+    padding-left: 10%;
+    visibility: hidden;
+    color: #E75454;
+    font-size: 14px;
+    margin-top: .75rem;
 }
 
 img.portrait{
