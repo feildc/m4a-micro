@@ -1,11 +1,13 @@
-
 const url = window.location;
 const urlString = url.toString();
 const baseUrl  = urlString.split('/')[0] + "//" + urlString.split('/')[2] + "/";
 let pageUrl = (urlString.split('/')[3].split('?')[0]);
 let currentPage;
 const resultsUrl = "results.html"
-let zipCode = 94118;
+const indexUrl = "index.html"
+
+//INDEX VARIABLES
+let zipCode = "";
 let zipValid = false;
 let checkButton;
 let zipInput;
@@ -13,14 +15,19 @@ let zipButton;
 let zipError;
 let zipValue = "";
 const params = new URLSearchParams(url.search); 
+let count = 0;
 
-window.onpageshow = function(){
+window.onbeforeunload = function(){
+    console.log("unload");
+}; 
+window.onload = function(){
+    count += 1; 
     if(checkPageUrl() === "index"){
     //Everything for the homepage can below this
      zipInput = document.getElementById("zip-input");
      zipError = document.getElementById("zip-alert");
      zipButton = document.getElementById("zip-button");
-     console.log("load");
+     zipValue = zipInput.value;
      zipCheck();
 
     //check the zipcode each time it's updated
@@ -33,6 +40,9 @@ window.onpageshow = function(){
     }
     else if(checkPageUrl() === "results"){
     //Everything for the homepage can below this
+    getZipFromUrl();
+
+    
 
     }
     
@@ -50,10 +60,20 @@ window.onpageshow = function(){
 
 }
 
-function addZipToUrl(){
+function processZip(){
+    if(zipValid){
+        addZipToUrlAndGo();
+    }
+    else{
+        zipError.style.visibility = "visible";
+    }
+}
+
+function addZipToUrlAndGo(){
 
     zipValue = zipInput.value;
-    let searchString = "?" + zipValue;
+    console.log(zipValue);  
+    let searchString = "?zip=" + zipValue;
     let newUrl = baseUrl + resultsUrl + searchString;
     window.location.href = newUrl;
 }   
@@ -120,6 +140,22 @@ function zipCheck(){
         }
     
 }
+
+
+function getZipFromUrl(){
+    const queryString = url.search;
+    const urlParams = new URLSearchParams(queryString);
+    zipCode = urlParams.get('zip')
+
+    //if there is no zip redirect to index
+    if(zipCode === null || zipCode.length !== 5 || isNaN(zipCode)){
+        let newUrl = baseUrl + indexUrl;
+        window.location.href = newUrl;
+    }
+    console.log("zip from url:" + zipCode);
+}
+
+
 
 
 
