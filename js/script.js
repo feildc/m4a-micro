@@ -110,7 +110,9 @@ window.onload = function(){
     else if(checkPageUrl() === "results"){
     //Everything for the homepage can below this
     getZipFromUrl();
-    getRepData()
+    addZipToInput();
+    
+    getRepData();
 
     
 
@@ -223,6 +225,11 @@ function getZipFromUrl(){
         window.location.href = newUrl;
     }
     console.log("zip from url:" + zipCode);
+}
+
+function addZipToInput(){
+    zipInput = document.getElementById("results-input");
+    zipInput.value = zipCode;
 }
 
 async function getGoogleData(){
