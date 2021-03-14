@@ -80,39 +80,41 @@ class rep {
 async function getRepData(){
 
 getGoogleData();
-getPPSenateDataFromAPI();
-getPPHouseDataFromAPI();
-getPPSenateBillDataFromAPI();
-getPPHouseBillDataFromAPI();
-
+getPPDataFromAPI();
+//getPPHouseDataFromAPI();
+//getPPSenateBillDataFromAPI();
+//getPPHouseBillDataFromAPI();
 }
+
+
 
 
 
 window.onload = function(){
     count += 1; 
     if(checkPageUrl() === "index"){
-    //Everything for the homepage can below this
-     zipInput = document.getElementById("zip-input");
-     zipError = document.getElementById("zip-alert");
-     zipButton = document.getElementById("zip-button");
-     zipValue = zipInput.value;
-     zipCheck();
-
-    //check the zipcode each time it's updated
-    zipInput.addEventListener('input', function (evt) {
-        addZipDash();
+        //Everything for the homepage can below this
+        zipInput = document.getElementById("zip-input");
+        zipError = document.getElementById("zip-alert");
+        zipButton = document.getElementById("zip-button");
+        zipValue = zipInput.value;
         zipCheck();
-        
-    })
+
+        //check the zipcode each time it's updated
+        zipInput.addEventListener('input', function (evt) {
+            addZipDash();
+            zipCheck();
+            
+        })
 
     }
     else if(checkPageUrl() === "results"){
-    //Everything for the homepage can below this
-    getZipFromUrl();
-    addZipToInput();
-    
-    getRepData();
+        //Everything for the homepage can below this
+        getZipFromUrl();
+        addZipToInput();
+        getRepData();
+
+        //  setPortraitImg();
 
     
 
@@ -282,7 +284,9 @@ async function getGoogleData(){
 }
 }
 
-async function getPPSenateDataFromAPI(){
+
+
+async function getPPDataFromAPI(){
     $.ajax({
         url: "https://api.propublica.org/congress/v1/117/senate/members.json",
        type: "GET",
@@ -292,7 +296,58 @@ async function getPPSenateDataFromAPI(){
            hasPPSenateData = true;
            PPSenateData = data.results[0].members;
            addPPSenateData();
-           //console.log(PPSenateData);
+           
+           $.ajax({
+            url: "https://api.propublica.org/congress/v1/116/house/members.json",
+            type: "GET",
+            dataType: "json",
+            headers: { "X-API-Key": "Pj1f1AMF9xo8j1krvZaZvGUFagIBZ1yPc2r7rd6g" },
+            success: function(data){
+                hasPPHouseData = true;
+                PPHouseData = data.results[0].members;
+                addPPhouseData();
+                //console.log(PPHouseData);
+
+                $.ajax({
+                    url: "https://api.propublica.org/congress/v1/116/bills/s1129/cosponsors.json",
+                    type: "GET",
+                    dataType: "json",
+                    headers: { "X-API-Key": "Pj1f1AMF9xo8j1krvZaZvGUFagIBZ1yPc2r7rd6g" },
+                    success: function(data){
+                        hasPPSenateData = true;
+                        senateBilldata = data.results[0];
+                        addPPSenateBillData();
+                        //console.log(senateBilldata);
+
+                        $.ajax({
+                            url: "https://api.propublica.org/congress/v1/116/bills/hr1384/cosponsors.json",
+                            type: "GET",
+                            dataType: "json",
+                            headers: { "X-API-Key": "Pj1f1AMF9xo8j1krvZaZvGUFagIBZ1yPc2r7rd6g" },
+                            success: function(data){
+                                hasPPHouseData = true;
+                                houseBilldata = data.results[0];
+                                addPPHouseBillData();
+                                setPortraitImg();
+                                //  console.log(houseBilldata);
+                            },
+                            error: function(){
+                                console.log("PP HOUSE BILL DATA FAILED");
+                                let loadError = true;
+                            }
+                        });
+                    },
+                    error: function(){
+                        console.log("PP SENATE BILL DATA FAILED");
+                        let loadError = true;
+                    }
+                });
+            },
+            error: function(){
+                console.log("PP HOUSE MEMBER DATA FAILED");
+                let loadError = true;
+            }
+        });
         },
         error: function(){
             console.log("PP SENATE MEMBER DATA FAILED");
@@ -301,64 +356,6 @@ async function getPPSenateDataFromAPI(){
     });
 }
 
-async function getPPHouseDataFromAPI(){
-    $.ajax({
-        url: "https://api.propublica.org/congress/v1/116/house/members.json",
-        type: "GET",
-        dataType: "json",
-        headers: { "X-API-Key": "Pj1f1AMF9xo8j1krvZaZvGUFagIBZ1yPc2r7rd6g" },
-        success: function(data){
-            hasPPHouseData = true;
-            PPHouseData = data.results[0].members;
-            addPPhouseData();
-            //console.log(PPHouseData);
-        },
-        error: function(){
-            console.log("PP HOUSE MEMBER DATA FAILED");
-            let loadError = true;
-        }
-    });
-}
-
-
-async function getPPSenateBillDataFromAPI(){
-    $.ajax({
-        url: "https://api.propublica.org/congress/v1/116/bills/s1129/cosponsors.json",
-        type: "GET",
-        dataType: "json",
-        headers: { "X-API-Key": "Pj1f1AMF9xo8j1krvZaZvGUFagIBZ1yPc2r7rd6g" },
-        success: function(data){
-            hasPPSenateData = true;
-            senateBilldata = data.results[0];
-            addPPSenateBillData();
-            //console.log(senateBilldata);
-        },
-        error: function(){
-            console.log("PP SENATE BILL DATA FAILED");
-            let loadError = true;
-        }
-    });
-}
-
-
-async function getPPHouseBillDataFromAPI(){
-    $.ajax({
-        url: "https://api.propublica.org/congress/v1/116/bills/hr1384/cosponsors.json",
-        type: "GET",
-        dataType: "json",
-        headers: { "X-API-Key": "Pj1f1AMF9xo8j1krvZaZvGUFagIBZ1yPc2r7rd6g" },
-        success: function(data){
-            hasPPHouseData = true;
-            houseBilldata = data.results[0];
-            addPPHouseBillData();
-            //  console.log(houseBilldata);
-        },
-        error: function(){
-            console.log("PP HOUSE BILL DATA FAILED");
-            let loadError = true;
-        }
-    });
-}
 
 
 function getFirstName(fullName){
@@ -520,5 +517,31 @@ function doesSenatorSponsor(id){
 
 
 
+
+function setPortraitImg(){
+    console.log(senators[0].photoUrl);
+    for(i = 0; i < senators.length; i++){
+        let portraitElement = document.getElementById("portrait-" +  (i+2));
+
+        if(senators[i].photoUrl != undefined){
+        portraitElement.src = senators[i].photoUrl;
+        console.log(senators[i].photoUrl);
+        }
+        else{
+            portraitElement.src = "./assets/portait-placeholder.svg";
+        }
+    }
+    for(i = 0; i < reps.length; i++){
+        let portraitElement = document.getElementById("portrait-" +  (i+1));
+
+        if(reps[i].photoUrl != undefined){
+        portraitElement.src = reps[i].photoUrl;
+        console.log(reps[i].photoUrl);
+        }
+        else{
+            portraitElement.src = "./assets/portait-placeholder.svg";
+        }
+    }
+}
 
 
