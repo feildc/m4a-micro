@@ -45,7 +45,7 @@ class senator {
         this.fullName;
         this.firstName;
         this.lastName;
-        this.phoneNumeber;
+        this.phoneNumber;
         this.contactUrl;
         this.m4aSupport;
         this.apiData;   
@@ -63,7 +63,7 @@ class rep {
         this.fullName;
         this.firstName;
         this.lastName;
-        this.phoneNumeber;
+        this.phoneNumber;
         this.contactUrl;
         this.m4aSupport;
         this.apiData = [];
@@ -329,6 +329,8 @@ async function getPPDataFromAPI(){
                                 houseBilldata = data.results[0];
                                 addPPHouseBillData();
                                 setPortraitImg();
+                                setInfoElements();
+                                setSupportElements();
                                 //  console.log(houseBilldata);
                             },
                             error: function(){
@@ -426,6 +428,7 @@ function getPPDataFromNameHouse(name,state){
 
     
     if(hasPPHouseData === true){
+        
         for(i = 0; i < PPHouseData.length; i++){
             let tempLastName = PPHouseData[i].last_name;
             let tempFirstName = PPHouseData[i].first_name;
@@ -459,12 +462,18 @@ function getPPDataFromNameHouse(name,state){
 function addPPSenateData(){
     for(let i = 0; i < senators.length; i++){
         let ppItems = getPPDataFromNameSenate(senators[i].fullName,senators[i].state);
+
+        if(ppItems !== undefined){
             senators[i].firstName = ppItems.tempFirstName;
             senators[i].lastName = ppItems.tempLastName;
             senators[i].contactUrl = ppItems.contactUrl;
             senators[i].party = ppItems.party;
             senators[i].id = ppItems.id;
             senators[i].website = ppItems.website;
+        }
+        else{
+            //set some variable we can check to see if we got the senate member PP data compared
+        }
 
     }
 }
@@ -472,7 +481,8 @@ function addPPSenateData(){
 function addPPhouseData(){
     
     for(let i = 0; i < reps.length; i++){
-        let ppItems = getPPDataFromNameHouse(reps[i].fullName,reps[i].state);
+        let ppItems = getPPDataFromNameHouse(reps[i].fullName,reps[i].state);   
+        if(ppItems !== undefined){
         reps[i].firstName = ppItems.tempFirstName;
         reps[i].lastName = ppItems.tempLastName;
         reps[i].contactUrl = ppItems.contactUrl;
@@ -480,6 +490,10 @@ function addPPhouseData(){
         reps[i].id = ppItems.id;
         reps[i].website = ppItems.website 
         //reps[i].m4aSupport = doesRepSponsor(reps[i].id); 
+        }
+        else{
+            //set some variable we can check to see if we got the house member PP data compared
+        }
     }
 }
 
@@ -528,7 +542,7 @@ function setPortraitImg(){
         console.log(senators[i].photoUrl);
         }
         else{
-            portraitElement.src = "./assets/portait-placeholder.svg";
+            portraitElement.src = "./assets/portrait-placeholder.svg";
         }
     }
     for(i = 0; i < reps.length; i++){
@@ -539,7 +553,98 @@ function setPortraitImg(){
         console.log(reps[i].photoUrl);
         }
         else{
-            portraitElement.src = "./assets/portait-placeholder.svg";
+            portraitElement.src = baseUrl+ "/assets/portrait-placeholder.svg";
+        }
+    }
+}
+
+
+function setInfoElements(){
+    for(i = 0; i < senators.length; i++){
+        let itemNumber = i+2
+        let firstName = document.getElementById("firstname-" +  itemNumber);
+        let lastName = document.getElementById("lastname-" +  itemNumber);
+        let phoneNumber = document.getElementById("phone-" +  itemNumber);
+        
+        firstName.innerHTML = senators[i].firstName;
+        lastName.innerHTML = senators[i].lastName;
+        phoneNumber.innerHTML = senators[i].phoneNumber;
+        let fetchedNumber = senators[i].phoneNumber.toString();
+        fetchedNumber = fetchedNumber.replace("(","");
+        fetchedNumber = fetchedNumber.replace(")","-");
+        fetchedNumber = fetchedNumber.replace(" ","");
+        phoneNumber.href = "tel:" + fetchedNumber;
+
+    }
+
+    for(i = 0; i < reps.length; i++){
+        let itemNumber = i+1;
+        let firstName = document.getElementById("firstname-" +  itemNumber);
+        let lastName = document.getElementById("lastname-" +  itemNumber);
+        let phoneNumber = document.getElementById("phone-" +  itemNumber);
+        
+        
+        firstName.innerHTML = reps[i].firstName;
+        lastName.innerHTML = reps[i].lastName;
+        phoneNumber.innerHTML = reps[i].phoneNumber;
+        let fetchedNumber = senators[i].phoneNumber.toString();
+        fetchedNumber = fetchedNumber.replace("(","");
+        fetchedNumber = fetchedNumber.replace(")","-");
+        fetchedNumber = fetchedNumber.replace(" ","");
+        phoneNumber.href = "tel:" + fetchedNumber;
+
+
+    }
+
+}
+
+function setSupportElements(){
+    for(i = 0; i < senators.length; i++){
+        let supportIcon = document.getElementById("support-icon-" +  (i+2));
+        let supportText = document.getElementById("support-text-" +  (i+2));
+        if(senators[i].m4aSupport != undefined){
+            let stance = senators[i].m4aSupport;
+            supportIcon.classList.remove("support-icon","against-icon");//remove any existing stance
+            supportText.classList.remove("against","for");//remove any existing stance
+            supportText.innerHTML = "";
+            console.log(supportIcon);
+            if(stance === true){
+                supportIcon.classList.add('support-icon');
+                supportText.innerHTML = "Supports Medicare For All";
+                supportText.classList.add('for');
+            }
+            else if(stance === false){
+                supportIcon.classList.add('against-icon');
+                supportText.innerHTML = "Does not support Medicare For All";
+                supportText.classList.add('against');
+            }
+        }
+        else{
+            supportIcon.style.visibility = "hidden" ;
+        }
+    }
+    for(i = 0; i < reps.length; i++){
+        let supportIcon = document.getElementById("support-icon-" +  (i+1));
+        let supportText = document.getElementById("support-text-" +  (i+1));
+        if(reps[i].m4aSupport != undefined){
+            let stance = reps[i].m4aSupport;
+            supportIcon.classList.remove("support-icon","against-icon");//remove any existing stance
+            supportText.classList.remove("against","for");//remove any existing stance
+            supportText.innerHTML = "";
+            console.log(supportIcon);
+            if(stance === true){
+                supportIcon.classList.add('support-icon');
+                supportText.innerHTML = "Supports Medicare For All";
+                supportText.classList.add('for');
+            }
+            else if(stance === false){
+                supportIcon.classList.add('against-icon');
+                supportText.innerHTML = "Does not support Medicare For All";
+                supportText.classList.add('against');
+            }
+        }
+        else{
+            supportIcon.style.visibility = "hidden" ;
         }
     }
 }

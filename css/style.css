@@ -246,6 +246,7 @@ img.portrait{
 .portrait-wrapper{
     position: relative;
     display: inline-block;
+    
 }
 .portrait-container{
     width:104px;
@@ -253,6 +254,9 @@ img.portrait{
     border-radius: 200px;
     overflow: hidden;
     filter: drop-shadow(0px 2.74667px 15px rgba(0, 0, 0, 0.1));
+    background-image: url("../assets/portrait-placeholder.svg");
+    background-position: 50% 0;
+    background-size: cover;
 }
 
 .support-icon{
