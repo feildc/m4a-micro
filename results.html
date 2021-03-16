@@ -17,6 +17,7 @@
 </head>
 
 <body>
+  <!-- <script src="js/script.js"></script> -->
   <script src="js/script.js"></script>
   <div id="results-page-wrap" class="page-wrap">
   <div class="section">
@@ -29,30 +30,33 @@
       <div id="results-content" class="container">
         <div id="results-header">
           <div id="results-heading"><h1>Do my senators and rep support medicare for all?</h1></div>
+          <div class="zip-bar-wrap">
           <div id="zip-results" class="zip-bar">
               <img class="zip-icon" src="assets/location.svg"></img>
               <input id="results-input" class="zip-input" placeholder="Enter Zip Code" type="text" maxlength="5"></input>
-              <div class="zip-button">Check</div>
+              <div id="zip-button" class="zip-button" onclick="processZip()">Check</div>
+            </div>
+            <span id="zip-alert" class="zip-alert">Please enter a valid zip code</span>
             </div>
       </div>
       <div id="results" class="container">
         <div class="result" id="result1">
             <div class="portrait-wrapper">
-                <div id="support-icon-1" class="against-icon"></div>
+                <div id="support-icon-1" class="support-icon"></div>
                 <div class="portrait-container">
-                    <img id="portrait-1" src="./assets/portrait-placeholder.svg" onerror="this.src='./assets/portrait-placeholder.svg'" class="portrait">
+                    <img id="portrait-1" src="" class="portrait">
                 </div>
             </div>
             <div class="result-info">
-            <h5>Representiative</h5> 
+            <div class="seat-wrap placeholder"><h5>Representiative</h5></div> 
             <div class="result-name">
-            <h3 id="firstname-1">Dianne</h3> 
-            <h3 id="lastname-1">Feinstein</h3> 
+            <div class="name-wrap placeholder"><h3 id="firstname-1"></h3></div> 
+            <div class="name-wrap placeholder"><h3 id="lastname-1"></h3></div> 
             </div>
-            <div id="support-text-1" class="stance-text against">Does Not Support Medicare For All</div>
+            <div id="support-text-1" class="stance-text against placeholder"></div>
         </div>
         <div class="contact-wrap">
-            <a href="" class="contact-button"><img src="./assets/web-globe.svg"><span>Contact Website</span></a>
+            <a href="" class="contact-button placeholder"><img src="./assets/web-globe.svg"><span>Contact Website</span></a>
             <a href id="phone-1" class="detail-text phone-container"><img class="phone-icon" src="assets/phone.svg">804-233-3312</a>
         </div>
         </div>
@@ -60,39 +64,39 @@
             <div class="portrait-wrapper">
                 <div id="support-icon-2" class="support-icon"></div>
                 <div class="portrait-container">
-                    <img id="portrait-2" id="portrait1" src="./assets/portrait-placeholder.svg" onerror="this.src='./assets/portrait-placeholder.svg'" class="portrait">
+                    <img id="portrait-2" id="portrait1" src="" class="portrait">
                 </div>
             </div>
             <div class="result-info">
-            <h5>Senator</h5> 
+            <div class="seat-wrap placeholder"><h5>Senator</h5></div>
             <div class="result-name">
-            <h3 id="firstname-2">Alexandria</h3> 
-            <h3 id="lastname-2">Ocasio-Cortez</h3> 
+            <div class="name-wrap placeholder"><h3 id="firstname-2"></h3></div> 
+            <div class="name-wrap placeholder"><h3 id="lastname-2"></h3></div> 
             </div>
-            <div id="support-text-2" class="stance-text for">SupportsMedicare For All</div>
+            <div id="support-text-2" class="stance-text for placeholder"></div>
         </div>
         <div class="contact-wrap">
-            <a href="" class="contact-button"><img src="./assets/web-globe.svg"><span>Contact Website</span></a>
+            <a href="" class="contact-button placeholder"><img src="./assets/web-globe.svg"><span>Contact Website</span></a>
             <a href id="phone-2" class="detail-text phone-container"><img class="phone-icon" src="assets/phone.svg">804-233-3312</a>
         </div>
         </div>
         <div class="result" id="result3">
             <div class="portrait-wrapper">
-                <div id="support-icon-3" class="against-icon"></div>
+                <div id="support-icon-3" class="support-icon"></div>
                 <div class="portrait-container">
-                    <img id="portrait-3" src="./assets/portrait-placeholder.svg" onerror="this.src='./assets/portrait-placeholder.svg'" class="portrait">
+                    <img id="portrait-3" src=""  class="portrait">
                 </div>
             </div>
             <div class="result-info">
-            <h5>Senator</h5> 
+            <div class="seat-wrap placeholder"><h5>Senator</h5></div> 
             <div class="result-name">
-            <h3 id="firstname-3">Nancy</h3> 
-            <h3 id="lastname-3">Pelosi</h3> 
+                <div class="name-wrap placeholder"><h3 id="firstname-3"></h3></div> 
+                <div class="name-wrap placeholder"><h3 id="lastname-3"></h3></div> 
             </div>
-            <div id="support-text-3" class="stance-text against">Does Not Support Medicare For All</div>
+            <div id="support-text-3" class="stance-text against placeholder"></div>
         </div>
         <div class="contact-wrap">
-            <a href="" class="contact-button"><img src="./assets/web-globe.svg"><span>Contact Website</span></a>
+            <a href="" class="contact-button placeholder"><img src="./assets/web-globe.svg"><span>Contact Website</span></a>
             <a href id="phone-3" class="detail-text phone-container"><img class="phone-icon" src="assets/phone.svg">804-233-3312</a>
         </div>
         </div>

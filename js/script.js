@@ -105,16 +105,47 @@ window.onload = function(){
             addZipDash();
             zipCheck();
             
-        })
+        });
+
+        //check to see if the ENTER key is hit while inputing a zip
+        zipInput.addEventListener("keyup", function(event) {
+            if (event.keyCode === 13) {
+                console.log("ENTER");
+                if(zipInput === document.activeElement){
+                    zipButton.click();
+                }
+            }
+        });
+
 
     }
     else if(checkPageUrl() === "results"){
         //Everything for the homepage can below this
+        zipInput = document.getElementById("results-input");
+        zipError = document.getElementById("zip-alert");
+        zipButton = document.getElementById("zip-button");
+        console.log(zipButton);
+        zipValue = zipCode;
         getZipFromUrl();
         addZipToInput();
         getRepData();
+        zipCheck();
+        //check the zipcode each time it's updated
+        zipInput.addEventListener('input', function (evt) {
+            addZipDash();
+            zipCheck();
+            
+        });
 
-        //  setPortraitImg();
+        //check to see if the ENTER key is hit while inputing a zip
+        zipInput.addEventListener("keyup", function(event) {
+            if (event.keyCode === 13) {
+                console.log("ENTER");
+                if(zipInput === document.activeElement){
+                    zipButton.click();
+                }
+            }
+        });
 
     
 
@@ -123,7 +154,6 @@ window.onload = function(){
     console.log(pageUrl);
     console.log(checkPageUrl());;
     checkButton = document.getElementById("zip-check-button");
-    zipInput = document.getElementById("zip-input");
     paramString = params.toString().replace(/\D/g,'');
     if(paramString < 5){
         console.log("no string");
@@ -133,6 +163,8 @@ window.onload = function(){
 }
 
 }
+
+
 
 function processZip(){
     if(zipValid){
@@ -327,6 +359,7 @@ async function getPPDataFromAPI(){
                             success: function(data){
                                 hasPPHouseData = true;
                                 houseBilldata = data.results[0];
+                                zipValid = true;
                                 addPPHouseBillData();
                                 setPortraitImg();
                                 setInfoElements();
@@ -536,7 +569,8 @@ function setPortraitImg(){
     console.log(senators[0].photoUrl);
     for(i = 0; i < senators.length; i++){
         let portraitElement = document.getElementById("portrait-" +  (i+2));
-
+        portraitElement.style.visibility = "initial";
+        portraitElement.onerror = function(){portraitElement.src = "./assets/portrait-placeholder.svg"};
         if(senators[i].photoUrl != undefined){
         portraitElement.src = senators[i].photoUrl;
         console.log(senators[i].photoUrl);
@@ -547,7 +581,8 @@ function setPortraitImg(){
     }
     for(i = 0; i < reps.length; i++){
         let portraitElement = document.getElementById("portrait-" +  (i+1));
-
+        portraitElement.style.visibility = "initial";
+        portraitElement.onerror = function(){portraitElement.src = "./assets/portrait-placeholder.svg"};
         if(reps[i].photoUrl != undefined){
         portraitElement.src = reps[i].photoUrl;
         console.log(reps[i].photoUrl);
@@ -560,6 +595,38 @@ function setPortraitImg(){
 
 
 function setInfoElements(){
+    let resultsInfo = document.getElementsByClassName("result-info");
+    let seatTags = document.getElementsByClassName("seat-wrap");
+    let nameWraps = document.getElementsByClassName("name-wrap");
+    let stanceTexts = document.getElementsByClassName("stance-text");
+    let contactButtons = document.getElementsByClassName("contact-button");
+    let stanceIcons = document.getElementsByClassName("support-icon");
+    let phoneNumbers = document.getElementsByClassName("phone-container");
+    console.log(stanceIcons);
+    for(let i = 0; i < resultsInfo.length; i++){
+        resultsInfo[i].style.width = "initial";
+    }
+    for(let i = 0; i < seatTags.length; i++){
+        seatTags[i].classList.remove("placeholder");
+        seatTags[i].querySelector("h5").style.visibility = "visible";
+    }
+    for(let i = 0; i < nameWraps.length; i++){
+        nameWraps[i].classList.remove("placeholder");
+    }
+    for(let i = 0; i < stanceTexts.length; i++){
+        stanceTexts[i].classList.remove("placeholder");
+    }
+    for(let i = 0; i < contactButtons.length; i++){
+        contactButtons[i].classList.remove("placeholder");
+        contactButtons[i].querySelector("img").style.visibility = "visible";
+        contactButtons[i].querySelector("span").style.visibility = "visible";
+    }
+    for(let i = 0; i < stanceIcons.length; i++){
+        stanceIcons[i].style.visibility = "visible";
+    }
+    for(let i = 0; i < phoneNumbers.length; i++){
+        phoneNumbers[i].style.visibility = "visible";
+    }
     for(i = 0; i < senators.length; i++){
         let itemNumber = i+2
         let firstName = document.getElementById("firstname-" +  itemNumber);
@@ -568,8 +635,8 @@ function setInfoElements(){
         
         firstName.innerHTML = senators[i].firstName;
         lastName.innerHTML = senators[i].lastName;
-        phoneNumber.innerHTML = senators[i].phoneNumber;
-        let fetchedNumber = senators[i].phoneNumber.toString();
+        phoneNumber.innerHTML = senators[i].phoneNumber[0];
+        let fetchedNumber = senators[i].phoneNumber[0].toString();
         fetchedNumber = fetchedNumber.replace("(","");
         fetchedNumber = fetchedNumber.replace(")","-");
         fetchedNumber = fetchedNumber.replace(" ","");
@@ -586,8 +653,8 @@ function setInfoElements(){
         
         firstName.innerHTML = reps[i].firstName;
         lastName.innerHTML = reps[i].lastName;
-        phoneNumber.innerHTML = reps[i].phoneNumber;
-        let fetchedNumber = senators[i].phoneNumber.toString();
+        phoneNumber.innerHTML = reps[i].phoneNumber[0];
+        let fetchedNumber = senators[i].phoneNumber[0].toString();
         fetchedNumber = fetchedNumber.replace("(","");
         fetchedNumber = fetchedNumber.replace(")","-");
         fetchedNumber = fetchedNumber.replace(" ","");
@@ -604,12 +671,12 @@ function setSupportElements(){
         let supportText = document.getElementById("support-text-" +  (i+2));
         if(senators[i].m4aSupport != undefined){
             let stance = senators[i].m4aSupport;
-            supportIcon.classList.remove("support-icon","against-icon");//remove any existing stance
+            supportIcon.classList.remove("against-icon");//remove any existing stance
             supportText.classList.remove("against","for");//remove any existing stance
             supportText.innerHTML = "";
             console.log(supportIcon);
             if(stance === true){
-                supportIcon.classList.add('support-icon');
+                supportIcon.classList.add('for-icon');
                 supportText.innerHTML = "Supports Medicare For All";
                 supportText.classList.add('for');
             }
@@ -628,12 +695,12 @@ function setSupportElements(){
         let supportText = document.getElementById("support-text-" +  (i+1));
         if(reps[i].m4aSupport != undefined){
             let stance = reps[i].m4aSupport;
-            supportIcon.classList.remove("support-icon","against-icon");//remove any existing stance
+            supportIcon.classList.remove("against-icon");//remove any existing stance
             supportText.classList.remove("against","for");//remove any existing stance
             supportText.innerHTML = "";
             console.log(supportIcon);
             if(stance === true){
-                supportIcon.classList.add('support-icon');
+                supportIcon.classList.add('for-icon');
                 supportText.innerHTML = "Supports Medicare For All";
                 supportText.classList.add('for');
             }
