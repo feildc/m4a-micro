@@ -363,7 +363,9 @@ async function getPPDataFromAPI(){
                                 addPPHouseBillData();
                                 setPortraitImg();
                                 setInfoElements();
+                                removePlaceHolderElements();
                                 setSupportElements();
+                                setContactButton();
                                 //  console.log(houseBilldata);
                             },
                             error: function(){
@@ -597,38 +599,6 @@ function setPortraitImg(){
 
 
 function setInfoElements(){
-    let resultsInfo = document.getElementsByClassName("result-info");
-    let seatTags = document.getElementsByClassName("seat-wrap");
-    let nameWraps = document.getElementsByClassName("name-wrap");
-    let stanceTexts = document.getElementsByClassName("stance-text");
-    let contactButtons = document.getElementsByClassName("contact-button");
-    let stanceIcons = document.getElementsByClassName("support-icon");
-    let phoneNumbers = document.getElementsByClassName("phone-container");
-    console.log(stanceIcons);
-    for(let i = 0; i < resultsInfo.length; i++){
-        resultsInfo[i].style.width = "initial";
-    }
-    for(let i = 0; i < seatTags.length; i++){
-        seatTags[i].classList.remove("placeholder");
-        seatTags[i].querySelector("h5").style.visibility = "visible";
-    }
-    for(let i = 0; i < nameWraps.length; i++){
-        nameWraps[i].classList.remove("placeholder");
-    }
-    for(let i = 0; i < stanceTexts.length; i++){
-        stanceTexts[i].classList.remove("placeholder");
-    }
-    for(let i = 0; i < contactButtons.length; i++){
-        contactButtons[i].classList.remove("placeholder");
-        contactButtons[i].querySelector("img").style.visibility = "visible";
-        contactButtons[i].querySelector("span").style.visibility = "visible";
-    }
-    for(let i = 0; i < stanceIcons.length; i++){
-        stanceIcons[i].style.visibility = "visible";
-    }
-    for(let i = 0; i < phoneNumbers.length; i++){
-        phoneNumbers[i].style.visibility = "visible";
-    }
     for(i = 0; i < senators.length; i++){
         let itemNumber = i+2
         let firstName = document.getElementById("firstname-" +  itemNumber);
@@ -666,6 +636,44 @@ function setInfoElements(){
     }
 
 }
+
+
+function removePlaceHolderElements(){
+    let resultsInfo = document.getElementsByClassName("result-info");
+    let seatTags = document.getElementsByClassName("seat-wrap");
+    let nameWraps = document.getElementsByClassName("name-wrap");
+    let stanceTexts = document.getElementsByClassName("stance-text");
+    let contactButtons = document.getElementsByClassName("contact-button");
+    let stanceIcons = document.getElementsByClassName("support-icon");
+    let phoneNumbers = document.getElementsByClassName("phone-container");
+    console.log(stanceIcons);
+    for(let i = 0; i < resultsInfo.length; i++){
+        resultsInfo[i].style.width = "initial";
+    }
+    for(let i = 0; i < seatTags.length; i++){
+        seatTags[i].classList.remove("placeholder");
+        seatTags[i].querySelector("h5").style.visibility = "visible";
+    }
+    for(let i = 0; i < nameWraps.length; i++){
+        nameWraps[i].classList.remove("placeholder");
+    }
+    for(let i = 0; i < stanceTexts.length; i++){
+        stanceTexts[i].classList.remove("placeholder");
+    }
+    for(let i = 0; i < contactButtons.length; i++){
+        contactButtons[i].classList.remove("placeholder");
+        contactButtons[i].querySelector("img").style.visibility = "visible";
+        contactButtons[i].querySelector("span").style.visibility = "visible";
+    }
+    for(let i = 0; i < stanceIcons.length; i++){
+        stanceIcons[i].style.visibility = "visible";
+    }
+    for(let i = 0; i < phoneNumbers.length; i++){
+        phoneNumbers[i].style.visibility = "visible";
+    }
+}
+
+
 
 function setSupportElements(){
     for(i = 0; i < senators.length; i++){
@@ -718,4 +726,36 @@ function setSupportElements(){
     }
 }
 
+
+function setContactButton(){
+    for(i = 0; i < senators.length; i++){
+        let contactButton = document.getElementById("contact-" +  (i+2));
+        if(senators[i].contactUrl != undefined){
+            contactButton.href = senators[i].contactUrl;
+        }
+        else if(senators[i].website != undefined){
+            contactButton.href = senators[i].website;
+        }
+        else{
+            contactButton.classList.add('disabled');
+            contactButton.querySelector("span").innerHTML = "Site Unavailable";
+        }
+    }
+
+
+    for(i = 0; i < reps.length; i++){
+        let contactButton = document.getElementById("contact-" +  (i+1));
+        if(reps[i].contactUrl != undefined){
+            contactButton.href = reps[i].contactUrl;
+        }
+        else if(reps[i].website != undefined){
+            contactButton.href = reps[i].website;
+        }
+        else{
+            contactButton.classList.add('disabled');
+            contactButton.querySelector("span").innerHTML = "Site Unavailable";
+        }
+
+    }
+}
 

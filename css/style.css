@@ -135,6 +135,18 @@ a.contact-button{
     display: flex;
     
 }
+a.contact-button.disabled{
+  pointer-events: none;
+  cursor: default;
+  text-decoration: none;
+  color:rgba(255,255, 255, .75);
+  opacity: .5;
+  background: rgb(196, 196, 196) ;
+}
+a.contact-button.disabled img{
+    opacity: .75;
+}
+
 .contact-button span{
     font-size: 20px;
     width: 81%;
