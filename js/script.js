@@ -526,6 +526,8 @@ function addPPhouseData(){
         }
         else{
             //set some variable we can check to see if we got the house member PP data compared
+            reps[i].firstName = getFirstName(reps[i].fullName);
+            reps[i].lastName = getLastName(reps[i].fullName);
         }
     }
 }
