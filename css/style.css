@@ -303,7 +303,7 @@ img.portrait{
 #main-content{
     display: flex;
     align-items: center;
-    margin-bottom: 5%;
+    margin-bottom: 11%;
 }
 #results-content{
         display: flex;
@@ -520,6 +520,7 @@ margin-bottom:1em;
     }
 
     #main-content{
+        margin-bottom: 5%;
     }
 
     .header{
