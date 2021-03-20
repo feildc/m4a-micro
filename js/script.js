@@ -21,7 +21,6 @@ let count = 0;
 
 //API VARIABLES
 const apiKey = "&key=" + "AIzaSyDsZS5s176fwr-Mgdv1Sikej5VNWVqSm3A";
-//const apiKey = "&key=" + "AIzaSyDsZS5s176fwr-Mgdv1sdfSikej5VNWVqSm3A";//for error
 const api_url = "https://civicinfo.googleapis.com/civicinfo/v2/representatives?address=";
 let hasGoogleData = false;
 
@@ -93,6 +92,11 @@ getPPDataFromAPI();
 window.onload = function(){
     count += 1; 
     if(checkPageUrl() === "index"){
+
+        const queryString = url.search;
+        const urlParams = new URLSearchParams(queryString);
+        console.log(urlParams.get("zip"));
+
         //Everything for the homepage can below this
         zipInput = document.getElementById("zip-input");
         zipError = document.getElementById("zip-alert");
@@ -116,6 +120,10 @@ window.onload = function(){
                 }
             }
         });
+
+        if(urlParams.get("zip") === "error"){
+            zipError.style.visibility = "visible";
+        }
 
 
     }
@@ -274,6 +282,7 @@ async function getGoogleData(){
     if(data.offices === undefined){
         googleLoadError = true;
         console.log("GOOGLE API LOAD ERROR");
+        returnToIndexZipError();
         //add function to display error content
     }
     else{
@@ -366,29 +375,34 @@ async function getPPDataFromAPI(){
                                 removePlaceHolderElements();
                                 setSupportElements();
                                 setContactButton();
+                                missingRepError();
                                 //  console.log(houseBilldata);
                             },
                             error: function(){
                                 console.log("PP HOUSE BILL DATA FAILED");
                                 let loadError = true;
+                                displayAPIError();
                             }
                         });
                     },
                     error: function(){
                         console.log("PP SENATE BILL DATA FAILED");
                         let loadError = true;
+                        displayAPIError();
                     }
                 });
             },
             error: function(){
                 console.log("PP HOUSE MEMBER DATA FAILED");
                 let loadError = true;
+                displayAPIError();
             }
         });
         },
         error: function(){
             console.log("PP SENATE MEMBER DATA FAILED");
             let loadError = true;
+            displayAPIError();
         }
     });
 }
@@ -397,7 +411,13 @@ async function getPPDataFromAPI(){
 
 function getFirstName(fullName){
     let nameArray = fullName.split(" ");
-    let firstName = nameArray[0];
+    nameLength = nameArray[0].replace(/\W/g, '').length;
+    if(nameLength > 1){
+        firstName = nameArray[0];
+    }
+    else{
+        firstName = nameArray[1];
+    }
     return firstName;
 }
 
@@ -485,7 +505,6 @@ function getPPDataFromNameHouse(name,state){
                 }
             }
         }
-
     }
     else{
         console.log("Data from Propublica did not load fast enough")
@@ -518,7 +537,12 @@ function addPPhouseData(){
     for(let i = 0; i < reps.length; i++){
         let ppItems = getPPDataFromNameHouse(reps[i].fullName,reps[i].state);   
         if(ppItems !== undefined){
-        reps[i].firstName = ppItems.tempFirstName;
+        if(ppItems.tempFirstName.replace(/\W/g, '').length > 1){
+                reps[i].firstName = ppItems.tempFirstName;
+        }
+        else{
+            reps[i].firstName = getFirstName(reps[i].fullName);
+        }
         reps[i].lastName = ppItems.tempLastName;
         reps[i].contactUrl = ppItems.contactUrl;
         reps[i].party = ppItems.party;
@@ -604,15 +628,20 @@ function setInfoElements(){
         let firstName = document.getElementById("firstname-" +  itemNumber);
         let lastName = document.getElementById("lastname-" +  itemNumber);
         let phoneNumber = document.getElementById("phone-" +  itemNumber);
-        
-        firstName.innerHTML = senators[i].firstName;
-        lastName.innerHTML = senators[i].lastName;
-        phoneNumber.innerHTML = senators[i].phoneNumber[0];
-        let fetchedNumber = senators[i].phoneNumber[0].toString();
-        fetchedNumber = fetchedNumber.replace("(","");
-        fetchedNumber = fetchedNumber.replace(")","-");
-        fetchedNumber = fetchedNumber.replace(" ","");
-        phoneNumber.href = "tel:" + fetchedNumber;
+        if(senators[i].firstName !== undefined){
+            firstName.innerHTML = senators[i].firstName;
+        }
+        if(senators[i].lastName !== undefined){
+            lastName.innerHTML = senators[i].lastName;
+        }
+        if(senators[i].phoneNumber !== undefined){
+            phoneNumber.innerHTML = senators[i].phoneNumber[0];
+            let fetchedNumber = senators[i].phoneNumber[0].toString();
+            fetchedNumber = fetchedNumber.replace("(","");
+            fetchedNumber = fetchedNumber.replace(")","-");
+            fetchedNumber = fetchedNumber.replace(" ","");
+            phoneNumber.href = "tel:" + fetchedNumber;
+        }
 
     }
 
@@ -623,14 +652,20 @@ function setInfoElements(){
         let phoneNumber = document.getElementById("phone-" +  itemNumber);
         
         
-        firstName.innerHTML = reps[i].firstName;
-        lastName.innerHTML = reps[i].lastName;
-        phoneNumber.innerHTML = reps[i].phoneNumber[0];
-        let fetchedNumber = senators[i].phoneNumber[0].toString();
-        fetchedNumber = fetchedNumber.replace("(","");
-        fetchedNumber = fetchedNumber.replace(")","-");
-        fetchedNumber = fetchedNumber.replace(" ","");
-        phoneNumber.href = "tel:" + fetchedNumber;
+        if(reps[i].firstName !== undefined){
+            firstName.innerHTML = reps[i].firstName;
+        }
+        if(reps[i].lastName !== undefined){
+            lastName.innerHTML = reps[i].lastName;
+        }
+        if(reps[i].phoneNumber !== undefined){
+            phoneNumber.innerHTML = reps[i].phoneNumber[0];
+            let fetchedNumber = reps[i].phoneNumber[0].toString();
+            fetchedNumber = fetchedNumber.replace("(","");
+            fetchedNumber = fetchedNumber.replace(")","-");
+            fetchedNumber = fetchedNumber.replace(" ","");
+            phoneNumber.href = "tel:" + fetchedNumber;
+        }
 
 
     }
@@ -646,6 +681,7 @@ function removePlaceHolderElements(){
     let contactButtons = document.getElementsByClassName("contact-button");
     let stanceIcons = document.getElementsByClassName("support-icon");
     let phoneNumbers = document.getElementsByClassName("phone-container");
+    let portraitContainers = document.getElementsByClassName("portrait-container");
     console.log(stanceIcons);
     for(let i = 0; i < resultsInfo.length; i++){
         resultsInfo[i].style.width = "initial";
@@ -670,6 +706,9 @@ function removePlaceHolderElements(){
     }
     for(let i = 0; i < phoneNumbers.length; i++){
         phoneNumbers[i].style.visibility = "visible";
+    }
+    for(let i = 0; i < portraitContainers.length; i++){
+        portraitContainers[i].classList.remove("placeholder");
     }
 }
 
@@ -717,7 +756,7 @@ function setSupportElements(){
             else if(stance === false){
                 supportIcon.classList.add('against-icon');
                 supportText.innerHTML = "Does not support Medicare For All";
-                supportText.classList.add('against');
+                supportText.classList.add('against');  
             }
         }
         else{
@@ -757,5 +796,32 @@ function setContactButton(){
         }
 
     }
+}
+
+function missingRepError(){
+    if(reps.length === 0){
+        let resultBox = document.getElementById("result" +  (i+1));
+        resultBox.classList.add('error');
+        resultBox.innerHTML = "<div class='errorbox'><div class='error-wrap'><img src='./assets/404-img.png'><span>Sorry we couldn't load this representative</span></div></div>";
+    }
+
+    for(let i = 0; i > 2; i++){
+        if(reps[i] == undefined){
+            let resultBox = document.getElementById("result" +  (i+2));
+            resultBox.classList.add('error');
+            resultBox.innerHTML = "<div class='errorbox'><div class='error-wrap'><img src='./assets/404-img.png'><span>Sorry we couldn't load this representative</span></div></div>";
+        }
+    }
+}
+
+function returnToIndexZipError(){  
+    window.location.href = baseUrl + indexUrl + "?zip=error";
+}
+
+function displayAPIError(){  
+    let resultsBox = document.getElementById("results");
+    resultsBox.classList.add('error');
+    resultsBox.innerHTML = "";
+    resultsBox.innerHTML = "<div class='errorbox-large'><div class='error-wrap'><img src='./assets/404-img.png'><span>Sorry we ran into a problem retrieving your representative's data.</span></div></div>"
 }
 
