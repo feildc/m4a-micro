@@ -92,7 +92,7 @@ getPPDataFromAPI();
 window.onload = function(){
     count += 1; 
     console.log(checkPageUrl());
-    if(checkPageUrl() === "index"){
+    if(checkPageUrl() === "index" || checkPageUrl() === undefined){
 
         const queryString = url.search;
         const urlParams = new URLSearchParams(queryString);
