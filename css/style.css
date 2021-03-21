@@ -266,8 +266,12 @@ img.portrait{
     height:104px;
     border-radius: 200px;
     overflow: hidden;
-    filter: drop-shadow(0px 2.74667px 15px rgba(0, 0, 0, 0.1));
+    box-shadow: 0px 2.75px 15px rgba(0, 0, 0, .1);
     background-color: rgba(196, 196, 196, .5);
+}
+
+.portrait-container.placeholder{
+    box-shadow:none;
 }
 
 .support-icon{
@@ -322,7 +326,6 @@ img.portrait{
         align-items: center;
         margin-bottom: 12%;
         flex-direction: column;
-    
 }
 #main-content h1,p{
     padding-left: 7px;
@@ -364,7 +367,7 @@ margin-bottom:1em;
 }
 
 #results-heading{
-    max-width: 50%;
+    max-width: 52%;
 }
 
 #results-header .zip-bar-wrap{
@@ -403,11 +406,16 @@ margin-bottom:1em;
     width: 67%;
 }
 .result{ 
+    padding: 0px;
     padding-left: 4%;
     width: 31.5%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+.result.error{
+    padding: 32px 40px 32px 40px;
 }
 
 .result-name{
@@ -454,11 +462,56 @@ margin-bottom:1em;
     visibility: hidden;
 }
 
+.errorbox{
+    background-color: rgba(255, 255, 255, .25   );
+    border-radius: 32px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-wrap{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.errorbox img{
+    width: 120px;
+    margin-bottom: 2em;
+}
+.errorbox span{
+    visibility: initial;
+    width: 60%;
+    text-align: center;
+    color:rgba(0, 0, 0, .4);
+}
+
 .stance-text.placeholder{
     background-color: rgba(196, 196, 196, .5);
     width: 100%;
     height: 16px;
     border-radius: 25px;
+}
+
+#results .errorbox-large{
+    width: 100%;
+    height: 500px;
+
+}
+#results .error-wrap{
+    margin-bottom:20px;
+}
+
+#results .errorbox-large img{
+    width: 200px;
+    margin-bottom: 2em;
+}
+
+#results .errorbox-large span{
+    width: 100%;
 }
 
 @media only screen and (max-width: 1440px) {
