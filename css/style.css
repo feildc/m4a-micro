@@ -234,6 +234,7 @@ a.contact-button:hover{
  width:100%;
  border:none;
  outline:none;
+ background-color: rgba(255,255, 255, .00);
  color:rgba(0, 0, 0, .5);
 }
 
@@ -656,12 +657,13 @@ margin-bottom:1em;
     }
     .header{
         height:108px;
+        padding-top: 0;
     }
     .section{
         width: 100%;;
     }
     .full-section{
-        padding-bottom:15%;
+        align-items:flex-start;
     }
     #illustration-wrap{
        display: none;
@@ -673,14 +675,19 @@ margin-bottom:1em;
     #main-content h1{
         font-size: 36px;
         padding:0;
+        margin-top: 0;
     }
     .page-wrap{
         width: 85%;
     }
+
+    .zip-bar-wrap{
+        margin-top:3rem; 
+    }
     .zip-bar{
         width: 100%;
         padding:8px;
-        margin-top: 4rem;
+        margin-top: 0px;
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;     
@@ -697,6 +704,19 @@ margin-bottom:1em;
         font-size: 20px;
         line-height: 47px;
         padding:0 28px;
+        display: none;
+    }
+    
+    .zip-button.mobile{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 64px;
+        margin-top: .6em;
+        margin-left:auto;
+        padding:0;
+        text-align: center;
     }
 
     .zip-icon{
@@ -727,6 +747,7 @@ margin-bottom:1em;
     #results-header{
         width: 100%;
         flex-direction: column;
+        padding-bottom: 3em;
     }
 
     #results-heading{
@@ -734,16 +755,20 @@ margin-bottom:1em;
     }
 
     #results-header h1{
-        font-size:38px;
+        font-size:36px;
     }
 
     .zip-bar#zip-results{
         width: 100%;
-        height: 72px;
+        height: 64px;
     }
 
     #zip-results .zip-button {
         padding: 0 36px;
+    }
+
+    .zip-alert{
+        margin-top: .5em;
     }
 
     #results-header .zip-icon{
