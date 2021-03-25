@@ -515,6 +515,10 @@ margin-bottom:1em;
     width: 100%;
 }
 
+.zip-button.mobile{
+display:none;
+}
+
 @media only screen and (max-width: 1440px) {
 
     .zip-bar#zip-results {
